@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Redirect</title>
+</head>
+
+<body>
+    <h1>Store Details</h1>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(() => {
+                sendDeviceInfoToBackend();
+                redirectToAppStore()
+            }, 3000);
+        });
+
+        function getOS() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            console.log(userAgent);
+
+            if (/windows phone/i.test(userAgent)) {
+                return "Windows Phone"
+            }
+
+            if (/android/i.test(userAgent)) {
+                return "Android";
+            }
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "iOS";
+            }
+
+            return "Browser";
+        }
+
+        function redirectToAppStore() {
+            const os = getOS();
+            let appStoreLink;
+
+            switch (os) {
+                case "Android":
+                    appStoreLink = "https://play.google.com/store/apps/details?id=com.example.yourapp";
+                    break;
+                case "iOS":
+                    appStoreLink = "https://apps.apple.com/us/app/your-app/id123456789";
+                    break;
+                default:
+                    appStoreLink = "Normal browser";
+                    console.log(appStoreLink);
+                    break;
+            }
+
+            // window.location.href = appStoreLink;
+        }
+
+        function generateDeviceCode() {
+            return 'device-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function sendDeviceInfoToBackend() {
+            const deviceCode = generateDeviceCode();
+            console.log(deviceCode);
+            const os = getOS();
+
+            // fetch('https://your-backend-url.com/api/device-info', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         deviceCode: deviceCode,
+            //         os: os,
+            //     }),
+            // })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         console.log('Success:', data);
+            //     })
+            //     .catch((error) => {
+            //         console.error('Error:', error);
+            //     });
+        }
+
+    </script>
+</body>
+
+</html>
