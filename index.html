@@ -12,19 +12,24 @@
 
 
     <script>
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     setTimeout(() => {
+        //         sendDeviceInfoToBackend();
+        //         redirectToAppStore()
+        //     }, 3000);
+        // });
+
+        // Call the functions on page load or based on user interaction
         document.addEventListener("DOMContentLoaded", function () {
-            setTimeout(() => {
-                sendDeviceInfoToBackend();
-                redirectToAppStore()
-            }, 3000);
+            sendDeviceInfoToBackend();
+            openAppOrRedirectToStore();
         });
 
         function getOS() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            console.log(userAgent);
 
             if (/windows phone/i.test(userAgent)) {
-                return "Windows Phone"
+                return "Windows Phone";
             }
 
             if (/android/i.test(userAgent)) {
@@ -35,36 +40,21 @@
                 return "iOS";
             }
 
-            return "Browser";
+            return "unknown";
         }
 
-        function redirectToAppStore() {
+        function generateCodeBasedOnOS() {
             const os = getOS();
-            let appStoreLink;
+            const uniqueId = Math.random().toString(36).substr(2, 9); // Generates a random unique ID
 
-            switch (os) {
-                case "Android":
-                    appStoreLink = "https://play.google.com/store/apps/details?id=com.yourkeepr.mobileapp&pli=1";
-                    break;
-                case "iOS":
-                    appStoreLink = "https://apps.apple.com/us/app/yourkeepr/id6480014565";
-                    break;
-                default:
-                    appStoreLink = "https://yourkeepr.com/";
-                    break;
-            }
-
-            window.location.href = appStoreLink;
-        }
-
-        function generateDeviceCode() {
-            return 'device-' + Math.random().toString(36).substr(2, 9);
+            // Combine OS and unique ID to create the code
+            const code = `${os}-${uniqueId}`;
+            return code;
         }
 
         function sendDeviceInfoToBackend() {
-            const deviceCode = generateDeviceCode();
-            console.log(deviceCode);
-            const os = getOS();
+            const code = generateCodeBasedOnOS(); // Generate the code based on OS
+            const os = getOS(); // Detect the OS
 
             // fetch('https://your-backend-url.com/api/device-info', {
             //     method: 'POST',
@@ -72,7 +62,7 @@
             //         'Content-Type': 'application/json',
             //     },
             //     body: JSON.stringify({
-            //         deviceCode: deviceCode,
+            //         deviceCode: code,
             //         os: os,
             //     }),
             // })
@@ -84,6 +74,77 @@
             //         console.error('Error:', error);
             //     });
         }
+
+        function openAppOrRedirectToStore() {
+            const os = getOS();
+            let appLink;
+            let appStoreLink;
+
+            if (os === "iOS") {
+                appLink = "https://mobileapp.yourkeepr.com/"; // Replace with your app's custom URL scheme or universal link
+                appStoreLink = "https://apps.apple.com/us/app/yourkeepr/id6480014565";
+            } else if (os === "Android") {
+                appLink = "https://mobileapp.yourkeepr.com/"; // Replace with your app's intent
+                appStoreLink = "https://play.google.com/store/apps/details?id=com.yourkeepr.mobileapp&pli=1";
+            } else {
+                appStoreLink = "https://yourkeepr.com/";
+            }
+
+            // Try to open the app
+            window.location.href = appLink;
+
+            // Fallback to App Store after a delay if the app is not installed
+            setTimeout(function () {
+                window.location.href = appStoreLink;
+            }, 2000);
+        }
+
+        // function redirectToAppStore() {
+        //     const os = getOS();
+        //     let appStoreLink;
+
+        //     switch (os) {
+        //         case "Android":
+        //             appStoreLink = "https://play.google.com/store/apps/details?id=com.yourkeepr.mobileapp&pli=1";
+        //             break;
+        //         case "iOS":
+        //             appStoreLink = "https://apps.apple.com/us/app/yourkeepr/id6480014565";
+        //             break;
+        //         default:
+        //             appStoreLink = "https://yourkeepr.com/";
+        //             break;
+        //     }
+
+        //     window.location.href = appStoreLink;
+        // }
+
+        // function generateDeviceCode() {
+        //     return 'device-' + Math.random().toString(36).substr(2, 9);
+        // }
+
+        // function sendDeviceInfoToBackend() {
+        //     const deviceCode = generateDeviceCode();
+        //     console.log(deviceCode);
+        //     const os = getOS();
+
+        //     fetch('https://your-backend-url.com/api/device-info', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({
+        //             deviceCode: deviceCode,
+        //             os: os,
+        //         }),
+        //     })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log('Success:', data);
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error:', error);
+        //         });
+        // }
 
     </script>
 </body>
