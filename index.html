@@ -9,141 +9,105 @@
 
 <body>
     <h1>Store Details</h1>
+    <a target="_blank" href="https://apps.apple.com/us/app/yourkeepr/id6480014565" onclick="return redirectForChrome();"
+        id="appStoreLink">Download app</a>
 
 
     <script>
+        function isChrome() {
+            var ua = navigator.userAgent.toLowerCase();
+            return ua.indexOf('chrome') > -1 && ua.indexOf('safari') > -1;
+        }
+
+        function redirectForChrome() {
+            if (isChrome()) {
+                // For Chrome, open the App Store link in a new tab
+                window.open('https://apps.apple.com/us/app/yourkeepr/id6480014565', '_blank');
+                return false; // Prevent default action, as we've already opened the link
+            }
+            return true; // For other browsers, follow the regular href link
+        }
+
+        // // Call the functions on page load or based on user interaction
         // document.addEventListener("DOMContentLoaded", function () {
-        //     setTimeout(() => {
+        //     setTimeout(function () {
         //         sendDeviceInfoToBackend();
-        //         redirectToAppStore()
+        //         openAppOrRedirectToStore();
         //     }, 3000);
         // });
 
-        // Call the functions on page load or based on user interaction
-        document.addEventListener("DOMContentLoaded", function () {
-            sendDeviceInfoToBackend();
-            openAppOrRedirectToStore();
-        });
+        // function getOS() {
+        //     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        function getOS() {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-            if (/windows phone/i.test(userAgent)) {
-                return "Windows Phone";
-            }
-
-            if (/android/i.test(userAgent)) {
-                return "Android";
-            }
-
-            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                return "iOS";
-            }
-
-            return "unknown";
-        }
-
-        function generateCodeBasedOnOS() {
-            const os = getOS();
-            const uniqueId = Math.random().toString(36).substr(2, 9); // Generates a random unique ID
-
-            // Combine OS and unique ID to create the code
-            const code = `${os}-${uniqueId}`;
-            return code;
-        }
-
-        function sendDeviceInfoToBackend() {
-            const code = generateCodeBasedOnOS(); // Generate the code based on OS
-            const os = getOS(); // Detect the OS
-
-            // fetch('https://your-backend-url.com/api/device-info', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         deviceCode: code,
-            //         os: os,
-            //     }),
-            // })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         console.log('Success:', data);
-            //     })
-            //     .catch((error) => {
-            //         console.error('Error:', error);
-            //     });
-        }
-
-        function openAppOrRedirectToStore() {
-            const os = getOS();
-            let appLink;
-            let appStoreLink;
-
-            if (os === "iOS") {
-                appLink = "https://mobileapp.yourkeepr.com/"; // Replace with your app's custom URL scheme or universal link
-                appStoreLink = "https://apps.apple.com/us/app/yourkeepr/id6480014565";
-            } else if (os === "Android") {
-                appLink = "https://mobileapp.yourkeepr.com/"; // Replace with your app's intent
-                appStoreLink = "https://play.google.com/store/apps/details?id=com.yourkeepr.mobileapp&pli=1";
-            } else {
-                appStoreLink = "https://yourkeepr.com/";
-            }
-
-            // Try to open the app
-            window.location.href = appLink;
-
-            // Fallback to App Store after a delay if the app is not installed
-            setTimeout(function () {
-                window.location.href = appStoreLink;
-            }, 2000);
-        }
-
-        // function redirectToAppStore() {
-        //     const os = getOS();
-        //     let appStoreLink;
-
-        //     switch (os) {
-        //         case "Android":
-        //             appStoreLink = "https://play.google.com/store/apps/details?id=com.yourkeepr.mobileapp&pli=1";
-        //             break;
-        //         case "iOS":
-        //             appStoreLink = "https://apps.apple.com/us/app/yourkeepr/id6480014565";
-        //             break;
-        //         default:
-        //             appStoreLink = "https://yourkeepr.com/";
-        //             break;
+        //     if (/windows phone/i.test(userAgent)) {
+        //         return "Windows Phone";
         //     }
 
-        //     window.location.href = appStoreLink;
+        //     if (/android/i.test(userAgent)) {
+        //         return "Android";
+        //     }
+
+        //     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        //         return "iOS";
+        //     }
+
+        //     return "unknown";
         // }
 
-        // function generateDeviceCode() {
-        //     return 'device-' + Math.random().toString(36).substr(2, 9);
+        // function generateCodeBasedOnOS() {
+        //     const os = getOS();
+        //     const uniqueId = Math.random().toString(36).substr(2, 9); // Generates a random unique ID
+
+        //     // Combine OS and unique ID to create the code
+        //     const code = `${os}-${uniqueId}`;
+        //     return code;
         // }
 
         // function sendDeviceInfoToBackend() {
-        //     const deviceCode = generateDeviceCode();
-        //     console.log(deviceCode);
-        //     const os = getOS();
+        //     const code = generateCodeBasedOnOS(); // Generate the code based on OS
+        //     const os = getOS(); // Detect the OS
 
-        //     fetch('https://your-backend-url.com/api/device-info', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             deviceCode: deviceCode,
-        //             os: os,
-        //         }),
-        //     })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             console.log('Success:', data);
-        //         })
-        //         .catch((error) => {
-        //             console.error('Error:', error);
-        //         });
+        //     // fetch('https://your-backend-url.com/api/device-info', {
+        //     //     method: 'POST',
+        //     //     headers: {
+        //     //         'Content-Type': 'application/json',
+        //     //     },
+        //     //     body: JSON.stringify({
+        //     //         deviceCode: code,
+        //     //         os: os,
+        //     //     }),
+        //     // })
+        //     //     .then(response => response.json())
+        //     //     .then(data => {
+        //     //         console.log('Success:', data);
+        //     //     })
+        //     //     .catch((error) => {
+        //     //         console.error('Error:', error);
+        //     //     });
+        // }
+
+        // function openAppOrRedirectToStore() {
+        //     const os = getOS();
+        //     let appLink;
+        //     let appStoreLink;
+
+        //     if (os === "iOS") {
+        //         // appLink = "https://mobileapp.yourkeepr.com/"; // Replace with your app's custom URL scheme or universal link
+        //         appStoreLink = "https://apps.apple.com/us/app/yourkeepr/id6480014565";
+        //     } else if (os === "Android") {
+        //         // appLink = "https://mobileapp.yourkeepr.com/"; // Replace with your app's intent
+        //         appStoreLink = "https://play.google.com/store/apps/details?id=com.yourkeepr.mobileapp&pli=1";
+        //     } else {
+        //         appStoreLink = "https://yourkeepr.com/";
+        //     }
+
+        //     // Try to open the app
+        //     // window.location.href = appLink;
+
+        //     // Fallback to App Store after a delay if the app is not installed
+        //     setTimeout(function () {
+        //         window.location.href = appStoreLink;
+        //     }, 2000);
         // }
 
     </script>
